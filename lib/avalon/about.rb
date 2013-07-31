@@ -22,5 +22,6 @@ module Avalon
     autoload :DelayedJob, "avalon/about/delayed_job"
     autoload :Matterhorn, "avalon/about/matterhorn"
     autoload :MediaInfo,  "avalon/about/media_info"
+    autoload :RTMPServer, "avalon/about/rtmp_server"
   end
 end
