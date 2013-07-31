@@ -20,6 +20,7 @@ module Avalon
     class RTMPServer < AboutPage::Configuration::Node
       PROTOCOL_VERSION = 3
       EPOCH_TIMESTAMP  = [5, 16, 90, 239]
+      FRAME_LENGTH     = 1536
 
       render_with 'generic_hash'
       attr_accessor :server, :port, :timeout
@@ -51,17 +52,17 @@ module Avalon
         Timeout.timeout(@timeout) do
           c0 = [PROTOCOL_VERSION].pack('C*')
           c1 = EPOCH_TIMESTAMP.dup
-          c1 << rand(255) while c1.length < 1536
+          c1 << rand(255) while c1.length < FRAME_LENGTH
           c1 = c1.pack('C*')
           s = TCPSocket.new @server, @port
           s.write(c0)
           s.write(c1)
           s0 = s.read(1)
           raise "Bad protocol version" if s0 != c0
-          s1 = s.read(1536)
+          s1 = s.read(FRAME_LENGTH)
           s.write(s1)
-          s2 = s.read(1536)
-          raise "Bad handshake" if s2[8..-1] != c1[8..-1]
+          s2 = s.read(FRAME_LENGTH)
+          raise "Bad handshake" unless s2.length == FRAME_LENGTH
           s.close
           return true
         end
