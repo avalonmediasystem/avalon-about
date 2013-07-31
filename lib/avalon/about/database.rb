@@ -12,15 +12,31 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-require 'about_page'
-require "avalon/about/engine"
-require "avalon/about/version"
-
 module Avalon
   module About
-    autoload :Database,   "avalon/about/database"
-    autoload :DelayedJob, "avalon/about/delayed_job"
-    autoload :Matterhorn, "avalon/about/matterhorn"
-    autoload :MediaInfo,  "avalon/about/media_info"
+    class Database < AboutPage::Configuration::Node
+      render_with 'generic_hash'
+
+      validates_each :connected? do |record, attr, value|
+        record.errors.add attr, " == false" unless value
+      end
+
+      def initialize(model=nil)
+        @model = model || ActiveRecord::Base.descendants.first
+      end
+
+      def connected?
+        @model.count
+        @model.connected?
+      rescue
+        false
+      end
+
+      def to_h
+        result = @model.configurations[Rails.env].reject { |k,v| ['username','password'].include?(k) }
+        result['connected'] = connected?
+        result
+      end
+    end
   end
 end
