@@ -1,12 +1,12 @@
 <h2>Matterhorn Services</h2>
 <div>
-  <ul>
+  <ul class="unstyled">
     <% profile.to_h['service'].sort { |a,b| a['type'] <=> b['type'] }.each do |service| %>
-      <% 
-        active = service['active'] ? '<span class="text-success">active</span>' : '<span class="text-error">inactive</span>' 
-        online = service['online'] ? '<span class="text-success">online</span>' : '<span class="text-error">offline</span>'
+      <%
+        active = service['active'] ? '<span class="label label-success">active</span>' : '<span class="label label-important">inactive</span>'
+        online = service['online'] ? '<span class="label label-success">online</span>' : '<span class="label label-important">offline</span>'
       %>
-      <li><%=service['type']%> (<%=active.html_safe%>, <%=online.html_safe%>)</li>
+      <li><%=active.html_safe%> <%=online.html_safe%> <%=service['type']%></li>
     <% end %>
   </ul>
 </div>
