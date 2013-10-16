@@ -51,6 +51,8 @@ module Avalon
             end
           rescue Errno::ESRCH => e
             'not found'
+          rescue SystemCallError => e
+            e.message
           end
           {
             :pidfile => Pathname.new(pidfile).relative_path_from(Rails.root).to_s,
