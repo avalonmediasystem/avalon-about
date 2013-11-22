@@ -54,9 +54,8 @@ module Avalon
       end
 
       def to_h
-        rubyhorn.client.services['services']
-      rescue
-        {'service'=>[]}
+        services = rubyhorn.client.services['services']['service'] rescue []
+        { 'service'=>services, 'storage'=>rubyhorn.client.storage }
       end
 
       def self.complete_status(service)
