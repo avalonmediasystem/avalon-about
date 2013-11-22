@@ -31,6 +31,11 @@ module Avalon
           end
         }
       end
+      validates_each :storage do |record, attr, value|
+        if record.storage['percentage_free'] < 10
+            record.errors.add attr, "#{record.storage['percentage_free']}% free"
+        end
+      end
 
       def initialize(rubyhorn)
         @rubyhorn = rubyhorn
