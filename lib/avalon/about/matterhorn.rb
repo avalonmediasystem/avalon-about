@@ -11,10 +11,12 @@
 #   CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
+require 'action_view'
 
 module Avalon
   module About
     class Matterhorn < AboutPage::Configuration::Node
+      include ActionView::Helpers::NumberHelper
       attr_reader :rubyhorn
 
       validates_each :ping do |record, attr, value|
@@ -42,6 +44,13 @@ module Avalon
 
       def services
         to_h['service']
+      end
+
+      def storage
+        @storage ||= rubyhorn.client.storage
+        @storage['percentage_free'] = (@storage['usable'].to_f / @storage['size'].to_f * 100).round
+        @storage['percentage_free_text'] = "#{number_to_human_size(@storage['usable'])} (#{@storage['percentage_free']}%) out of #{number_to_human_size(@storage['size'])} available"
+        @storage
       end
 
       def to_h
