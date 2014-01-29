@@ -1,12 +1,18 @@
 <h2>Matterhorn Services</h2>
-<div class="progress" style="width: 300px; float: right;">
-  <div class="bar bar-success" style="width: <%= profile.storage['percentage_free'] %>%;">    </div>
-    <div style="width: 100%; position: absolute;font-weight: bold;padding-left:10px; padding-top: 1px; color: white;"> <%= profile.storage['percentage_free_text'] %></div>
-    <div style="width: 100%; position: absolute;font-weight: bold;padding-left:10px;"> <%= profile.storage['percentage_free_text'] %></div>
-  </div>
-<div>
 <div>
   <ul class="unstyled">
+  
+    <div class="progress" style="width: 300px; float: right;">
+      <div class="bar bar-success" style="width: <%= profile.storage['percentage_free'] %>%;">    </div>
+        <div style="width: 100%; position: absolute;font-weight: bold;padding-left:10px; padding-top: 1px; color: white;"> 
+          <%= profile.storage['percentage_free_text'] %>
+        </div>
+        <div style="width: 
+        100%; position: absolute;font-weight: bold;padding-left:10px;"> 
+          <%= profile.storage['percentage_free_text'] %>
+        </div>
+    </div>
+
     <% profile.to_h['service'].sort { |a,b| a['type'] <=> b['type'] }.each do |service| %>
       <%
         active = service['active'] ? '<span class="label label-success">active</span>' : '<span class="label label-important">inactive</span>'
