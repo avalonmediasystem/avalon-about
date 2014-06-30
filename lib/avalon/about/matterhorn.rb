@@ -27,7 +27,10 @@ module Avalon
       validates_each :services do |record, attr, value|
         record.services.each { |s| 
           if s['service_state'].to_s != 'NORMAL'
-            record.errors.add s['path'], ": #{s['service_state']} (#{complete_status(s)})"
+            record.errors.add s['type'], ": #{s['service_state']} (#{complete_status(s)})"
+          end
+          unless s['online']
+            record.errors.add s['type'], "is offline"
           end
         }
       end
