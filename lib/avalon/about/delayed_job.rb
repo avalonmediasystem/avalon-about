@@ -38,7 +38,7 @@ module Avalon
       end
 
       def jobs
-        pidfiles = Dir[File.join(Rails.root,@options[:pid_dir],'delayed_job.*.pid')].sort { |a,b| 
+        pidfiles = Dir[Rails.root.join(@options[:pid_dir],'delayed_*.pid')].sort { |a,b| 
           File.basename(a).scan(/\d+/).first.to_i <=> File.basename(b).scan(/\d+/).first.to_i
         }
         pidfiles.collect do |pidfile|

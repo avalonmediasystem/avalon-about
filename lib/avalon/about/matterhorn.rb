@@ -25,6 +25,9 @@ module Avalon
         end
       end
       validates_each :services do |record, attr, value|
+        if record.services.empty?
+          record.errors.add attr, "No services reported"
+        end
         record.services.each { |s| 
           if s['service_state'].to_s != 'NORMAL'
             record.errors.add s['type'], ": #{s['service_state']} (#{complete_status(s)})"
@@ -35,7 +38,9 @@ module Avalon
         }
       end
       validates_each :storage do |record, attr, value|
-        if record.storage['percentage_free'] < 10
+        if record.storage == 'N/A'
+            record.errors.add attr, "Cannot determine current matterhorn storage"
+        elsif record.storage['percentage_free'] < 10
             record.errors.add attr, "#{record.storage['percentage_free']}% free"
         end
       end
@@ -59,11 +64,13 @@ module Avalon
         @storage['percentage_free'] = (@storage['usable'].to_f / @storage['size'].to_f * 100).round
         @storage['percentage_free_text'] = "#{number_to_human_size(@storage['usable'])} (#{@storage['percentage_free']}%) out of #{number_to_human_size(@storage['size'])} available"
         @storage
+      rescue
+        'N/A'
       end
 
       def to_h
         services = rubyhorn.client.services['services']['service'] rescue []
-        { 'service'=>services, 'storage'=>rubyhorn.client.storage }
+        { 'service'=>services, 'storage'=>storage }
       end
 
       def self.complete_status(service)
