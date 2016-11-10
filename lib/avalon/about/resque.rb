@@ -12,18 +12,28 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-require 'about_page'
-require "avalon/about/engine"
-require "avalon/about/version"
-
 module Avalon
   module About
-    autoload :Database,         "avalon/about/database"
-    autoload :DelayedJob,       "avalon/about/delayed_job"
-    autoload :Matterhorn,       "avalon/about/matterhorn"
-    autoload :MediaInfo,        "avalon/about/media_info"
-    autoload :Resque,           "avalon/about/resque"
-    autoload :ResqueScheduler,  "avalon/about/resque_scheduler"
-    autoload :RTMPServer,       "avalon/about/rtmp_server"
+    class Resque < AboutPage::Configuration::Node
+      render_with 'generic_hash'
+
+      validates_each :connected? do |record, attr, value|
+        record.errors.add attr, ": Resque.redis.ping did not return 'PONG'" unless value
+      end
+
+      def initialize(resque)
+        @resque = resque
+      end
+
+      def connected?
+        @resque.redis.ping == "PONG"
+      rescue
+        false
+      end
+
+      def to_h
+        @resque.info
+      end
+    end
   end
 end
