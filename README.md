@@ -34,4 +34,5 @@ of the additional node types provided by `Avalon::About`:
     config.mediainfo        = Avalon::About::MediaInfo.new(:version => '>=0.7.59')
     config.streaming_server = Avalon::About::RTMPServer.new(streaming_server_host)
     config.delayed_job      = Avalon::About::DelayedJob.new(:min => 1)
-    config.resque      = Avalon::About::Resque.new(::Resque)
+    config.resque           = Avalon::About::Resque.new(::Resque)
+    config.resque_scheduler = Avalon::About::ResqueScheduler.new(::Resque::Scheduler)

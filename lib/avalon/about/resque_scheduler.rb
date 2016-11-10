@@ -12,18 +12,34 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-require 'about_page'
-require "avalon/about/engine"
-require "avalon/about/version"
-
 module Avalon
   module About
-    autoload :Database,         "avalon/about/database"
-    autoload :DelayedJob,       "avalon/about/delayed_job"
-    autoload :Matterhorn,       "avalon/about/matterhorn"
-    autoload :MediaInfo,        "avalon/about/media_info"
-    autoload :Resque,           "avalon/about/resque"
-    autoload :ResqueScheduler,  "avalon/about/resque_scheduler"
-    autoload :RTMPServer,       "avalon/about/rtmp_server"
+    class ResqueScheduler < AboutPage::Configuration::Node
+      render_with 'generic_hash'
+
+      validates_each :reachable? do |record, attr, value|
+        record.errors.add attr, " == false" unless value
+      end
+
+      def initialize(resque_scheduler)
+        @resque_scheduler = resque_scheduler
+        @resque = @resque_scheduler.parent
+      end
+
+      def reachable?
+        !@resque.redis.get(@resque_scheduler.master_lock.key).nil?
+      rescue
+        false
+      end
+
+      def to_h
+        {
+          'server environment' => @resque_scheduler.env,
+          'current master' => @resque_scheduler.master_lock.value
+        }
+      rescue
+        {}
+      end
+    end
   end
 end

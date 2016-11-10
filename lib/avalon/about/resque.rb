@@ -18,7 +18,7 @@ module Avalon
       render_with 'generic_hash'
 
       validates_each :connected? do |record, attr, value|
-        record.errors.add attr, "Resque.redis.ping returned #{value.inspect} instead of PONG" unless value == "PONG"
+        record.errors.add attr, ": Resque.redis.ping did not return 'PONG'" unless value
       end
 
       def initialize(resque)
@@ -26,7 +26,7 @@ module Avalon
       end
 
       def connected?
-        @resque.redis.ping
+        @resque.redis.ping == "PONG"
       rescue
         false
       end
