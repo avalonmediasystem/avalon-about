@@ -25,5 +25,6 @@ module Avalon
     autoload :Resque,           "avalon/about/resque"
     autoload :ResqueScheduler,  "avalon/about/resque_scheduler"
     autoload :RTMPServer,       "avalon/about/rtmp_server"
+    autoload :HLSServer,        "avalon/about/hls_server"
   end
 end
