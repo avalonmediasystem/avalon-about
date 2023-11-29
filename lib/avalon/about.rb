@@ -22,9 +22,11 @@ module Avalon
     autoload :DelayedJob,       "avalon/about/delayed_job"
     autoload :Matterhorn,       "avalon/about/matterhorn"
     autoload :MediaInfo,        "avalon/about/media_info"
+    autoload :Redis,            "avalon/about/redis"
     autoload :Resque,           "avalon/about/resque"
     autoload :ResqueScheduler,  "avalon/about/resque_scheduler"
     autoload :RTMPServer,       "avalon/about/rtmp_server"
+    autoload :Sidekiq,          "avalon/about/sidekiq"
     autoload :HLSServer,        "avalon/about/hls_server"
   end
 end
