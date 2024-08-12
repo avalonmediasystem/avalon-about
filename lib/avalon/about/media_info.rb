@@ -12,8 +12,6 @@
 #   specific language governing permissions and limitations under the License.
 # ---  END LICENSE_HEADER BLOCK  ---
 
-require 'mediainfo'
-
 module Avalon
   module About
     class MediaInfo < AboutPage::Configuration::Node
@@ -23,23 +21,19 @@ module Avalon
       validates_each :version do |record, attr, value|
         if value.nil?
           record.errors.add :mediainfo, "not found at `#{record.path}`"
-        else
-          unless Gem::Requirement.new(record.options[:version]).satisfied_by?(Gem::Version.new(value))
-            record.errors.add attr, ": requires #{record.options[:version].inspect}; found #{value.inspect}"
-          end
         end
       end
 
       def initialize(options={})
-        @options = { :version => '>= 0' }.merge(options)
+        @options = options
       end
 
       def path
-        Mediainfo.path
+        @options[:path] || "mediainfo"
       end
 
       def version
-        Mediainfo.version
+        `#{path} --Version`[/v([\d.]+)/, 1]
       rescue
         nil
       end

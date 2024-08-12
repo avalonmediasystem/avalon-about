@@ -31,7 +31,7 @@ of the additional node types provided by `Avalon::About`:
 
     config.database         = Avalon::About::Database.new(OneOfMyModels)
     config.matterhorn       = Avalon::About::Matterhorn.new(Rubyhorn)
-    config.mediainfo        = Avalon::About::MediaInfo.new(:version => '>=0.7.59')
+    config.mediainfo        = Avalon::About::MediaInfo.new(:path => '/usr/bin/mediainfo')
     config.streaming_server = Avalon::About::RTMPServer.new(streaming_server_host)
     config.delayed_job      = Avalon::About::DelayedJob.new(:min => 1)
     config.resque           = Avalon::About::Resque.new(::Resque)
