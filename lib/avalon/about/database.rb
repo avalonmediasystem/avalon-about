@@ -21,8 +21,9 @@ module Avalon
         record.errors.add attr, " == false" unless value
       end
 
-      def initialize(model=nil)
+      def initialize(model=nil, options = {})
         @model = model || ActiveRecord::Base.descendants.first
+        @timeout = options[:timeout]
       end
 
       def connected?

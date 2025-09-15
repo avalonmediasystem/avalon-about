@@ -7,8 +7,9 @@ module Avalon
         record.errors.add attr, ": Can't connect to Redis" unless value
       end
 
-      def initialize(redis)
+      def initialize(redis, options = {})
         @redis = redis
+        @timeout = options[:timeout]
       end
 
       def status
