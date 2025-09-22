@@ -21,8 +21,9 @@ module Avalon
         record.errors.add attr, ": Resque.redis.ping did not return 'PONG'" unless value
       end
 
-      def initialize(resque)
+      def initialize(resque, options = {})
         @resque = resque
+        @timeout = options[:timeout]
       end
 
       def connected?

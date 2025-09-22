@@ -21,9 +21,10 @@ module Avalon
         record.errors.add attr, " == false" unless value
       end
 
-      def initialize(resque_scheduler)
+      def initialize(resque_scheduler, options = {})
         @resque_scheduler = resque_scheduler
         @resque = @resque_scheduler.parent
+        @timeout = options[:timeout]
       end
 
       def reachable?
