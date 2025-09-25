@@ -7,7 +7,7 @@ module Avalon
         record.errors.add attr, ": Sidekiq process count does not match #{@process_count}" unless value
       end
 
-      def initialize(numProcesses: 1, options = {})
+      def initialize(options = {}, numProcesses: 1)
         @process_count = numProcesses
         @timeout = options[:timeout]
       end
